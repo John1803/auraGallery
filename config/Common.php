@@ -9,6 +9,39 @@ class Common extends Config
     public function define(Container $di)
     {
         $di->set('aura/project-kernel:logger', $di->lazyNew('Monolog\Logger'));
+
+        $di->params['Aura\Sql\ExtendedPdo'] = [
+            "dsn" => "mysql:dbname=stoaj;host=127.0.0.1",
+            "username" => "root",
+            "password" => "root",
+        ];
+
+        $di->params['Gallery\Models\Album\AlbumModel'] = [
+            "pdo" => $di->lazyNew("Aura\Sql\ExtendedPdo")
+        ];
+
+        $di->params['Gallery\Models\Album\AlbumService'] = [
+            "albumMapper" => $di->lazyNew("Gallery\Models\Album\AlbumMapper"),
+            "albumModel" => $di->lazyNew("Gallery\Models\Album\AlbumModel"),
+            "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
+        ];
+
+        $di->params['Gallery\Actions\Gallery\GalleryRootAlbumsAction'] = [
+            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
+            "galleryResponder" => $di->lazyNew("Gallery\Responders\GalleryResponder"),
+        ];
+
+        // Config for FOA.Responder_Bundle
+        $di->params['FOA\Responder_Bundle\Renderer\AuraView'] = [
+            "engine" => $di->lazyNew('Aura\View\View'),
+        ];
+
+        $di->params['FOA\Responder_Bundle\AbstractResponder'] = [
+            "response" => $di->lazyGet('aura/web-kernel:response'),
+            "accept" => $di->lazyNew('Aura\Accept\Accept'),
+            "renderer" => $di->lazyNew('FOA\Responder_Bundle\Renderer\AuraView'),
+        ];
+
         $di->params['Gallery\Actions\HelloBaby'] = array(
             'response' => $di->lazyGet('aura/web-kernel:response'),
         );

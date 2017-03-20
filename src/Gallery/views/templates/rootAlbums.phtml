@@ -1,0 +1,16 @@
+<?php
+use Aura\Html\Escaper;
+
+$this->title()->set("Gallery");
+
+if(count($this->albums) > 0): ?>
+    <?php foreach($this->albums as $album): ?>
+        <div class="col-xs-2">
+            <p><a href="/gallery/albums/images/album/<?php echo Escaper::h($album->getId()); ?>"><?php echo Escaper::h($album->getTitle()); ?></p>
+        </div>
+        <?php endforeach; ?>
+
+<?php else: ?>
+    <p>No current albums</p>
+<?php endif; ?>
+
