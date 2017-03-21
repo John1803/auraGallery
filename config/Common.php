@@ -16,6 +16,10 @@ class Common extends Config
             "password" => "root",
         ];
 
+        $di->params['Html\Helper\Router'] = [
+            "router" => $di->lazyGet('aura/web-kernel:router')
+        ];
+        $di->params['Aura\Html\HelperLocator']['map']["router"] = $di->lazyNew('Html\Helper\Router');
 //        $di->params['Gallery\Models\AbstractModel'] = [
 //            "pdo" => $di->lazyNew("Aura\Sql\ExtendedPdo")
 //        ];
