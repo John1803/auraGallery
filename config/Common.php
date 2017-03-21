@@ -16,7 +16,7 @@ class Common extends Config
             "password" => "root",
         ];
 
-        $di->params['Gallery\Models\Album\AlbumModel'] = [
+        $di->params['Gallery\Models\AbstractModel'] = [
             "pdo" => $di->lazyNew("Aura\Sql\ExtendedPdo")
         ];
 
@@ -26,12 +26,39 @@ class Common extends Config
             "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
         ];
 
+        $di->params['Gallery\Models\Image\ImageService'] = [
+            "imageMapper" => $di->lazyNew("Gallery\Models\Image\ImageMapper"),
+            "imageModel" => $di->lazyNew("Gallery\Models\Image\ImageModel"),
+            "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
+        ];
+
+        /**
+         * Gallery actions
+         */
         $di->params['Gallery\Actions\Gallery\GalleryRootAlbumsAction'] = [
             "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
             "galleryResponder" => $di->lazyNew("Gallery\Responders\GalleryResponder"),
         ];
 
-        // Config for FOA.Responder_Bundle
+        $di->params['Gallery\Actions\Gallery\GalleryShowImagesAlbumsAction'] = [
+            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
+            "imageService" => $di->lazyNew("Gallery\Models\Image\ImageService"),
+            "galleryResponder" => $di->lazyNew("Gallery\Responders\GalleryResponder"),
+        ];
+
+
+
+        /**
+         * Album's actions
+         */
+        $di->params['Gallery\Actions\Gallery\Album\AlbumsEditAction'] = [
+            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
+            "albumEditResponder" => $di->lazyNew("Gallery\Responders\GalleryEditResponder"),
+        ];
+
+        /**
+         * Config for FOA.Responder_Bundle
+         */
         $di->params['FOA\Responder_Bundle\Renderer\AuraView'] = [
             "engine" => $di->lazyNew('Aura\View\View'),
         ];
@@ -99,6 +126,9 @@ class Common extends Config
         $router->add("gallery_root_albums", "/")
                 ->addValues(["action" => "root_albums"]);
 
+        $router->add("gallery_edit", "/gallery/edit")
+            ->addValues(["action" => "gallery_edit"]);
+
         /**
          * Images and Subalbums of certain album
          */
@@ -115,8 +145,7 @@ class Common extends Config
                 ->addServer(["REQUEST_METHOD" => "POST"])
                 ->addValues(["action" => "album_create"]);
             
-        $router->add("albums_edit", "/albums/edit")
-                ->addValues(["action" => "albums_edit"]);
+
 
         $router->add("albums_edit_album", "/edit/album/{id}")
                 ->addTokens(["id" => "\d+"])
@@ -151,8 +180,8 @@ class Common extends Config
                                 $di->lazyNew("Gallery\Actions\Gallery\GalleryRootAlbumsAction")
         );
 
-        $dispatcher->setObject("album_form_creation",
-                                $di->lazyNew("Gallery\Actions\Album\GalleryShowImagesAlbumsAction")
+        $dispatcher->setObject("show_images_albums",
+                                $di->lazyNew("Gallery\Actions\Gallery\GalleryShowImagesAlbumsAction")
         );
 
         $dispatcher->setObject("album_form_creation",
@@ -163,8 +192,8 @@ class Common extends Config
                                 $di->lazyNew("Gallery\Actions\Album\AlbumCreateAction")
         );
 
-        $dispatcher->setObject("albums_edit",
-                                $di->lazyNew("Gallery\Actions\Album\AlbumsEditAction")
+        $dispatcher->setObject("gallery_edit",
+                                $di->lazyNew("Gallery\Actions\Gallery\GalleryEditAction")
         );
 
         $dispatcher->setObject("albums_edit_album",

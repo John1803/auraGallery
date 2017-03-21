@@ -19,7 +19,7 @@ class AlbumModel extends AbstractModel
 
     public function fetchDirectDescendantAlbums($id)
     {
-        $albums = $this->pdo->fetchOne("SELECT descendant.id, 
+        $albums = $this->pdo->fetchAll("SELECT descendant.id, 
                                                 descendant.title, 
                                                 descendant.path, 
                                                 descendant.lft, 

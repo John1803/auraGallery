@@ -17,16 +17,13 @@
 </head>
 <body>
 
-    <?php
-    if ($this->hasSection('sidebar')) {
+    <?php if ($this->hasSection('sidebar')):
         echo $this->getSection('sidebar');
-    } else {
+    else:
         echo $this->render('sidebar');
-    }
-    ?>
+    endif; ?>
     <div class="content container">
         <?php echo $this->getContent(); ?>
     </div>
-
 </body>
 </html>

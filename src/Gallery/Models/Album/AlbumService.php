@@ -53,4 +53,19 @@ class AlbumService
             return $this->payloadFactory->error(["exception" => $e, ]);
         }
     }
+
+    public function getDirectDescendantAlbums($id)
+    {
+        try {
+            $rows = $this->albumModel->fetchDirectDescendantAlbums($id);
+            if($rows) {
+                $albums = $this->albumMapper->newCollection($rows);
+                return $this->payloadFactory->found(["albums" => $albums, ]);
+            } else {
+                return $this->payloadFactory->notFound([]);
+            }
+        } catch (\Exception $e) {
+            return $this->payloadFactory->error(["exception" => $e, ]);
+        }
+    }
 }

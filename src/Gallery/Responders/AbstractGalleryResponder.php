@@ -2,6 +2,7 @@
 
 namespace Gallery\Responders;
 
+use FOA\DomainPayload\PayloadInterface;
 use FOA\Responder_Bundle\AbstractResponder;
 
 abstract class AbstractGalleryResponder extends AbstractResponder
@@ -12,6 +13,7 @@ abstract class AbstractGalleryResponder extends AbstractResponder
 
         $templates = [
             "rootAlbums",
+            "imagesAlbums",
         ];
 
         $layouts = [
@@ -38,5 +40,16 @@ abstract class AbstractGalleryResponder extends AbstractResponder
                 __DIR__ . "../../views/layouts/{$layout}.phtml"
             );
         }
+    }
+
+    public function addPayload(PayloadInterface $payload)
+    {
+        $a = $payload->get();
+
+        foreach ($payload->get() as $key => $value) {
+            $payload->$key = $value;
+        }
+//        $this->payload = array_merge($this->payload->payload, $this->payload->payload);
+        return $this;
     }
 }

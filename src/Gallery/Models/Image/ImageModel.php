@@ -1,6 +1,6 @@
 <?php
 
-namespace Gallery\Models\Album;
+namespace Gallery\Models\Image;
 
 use Gallery\Models\AbstractModel;
 

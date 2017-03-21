@@ -1,0 +1,31 @@
+<?php
+use Aura\Html\Escaper;
+
+$this->title()->set("Images and albums");
+
+if(count($this->albums) > 0):
+    foreach($this->albums as $album): ?>
+        <div>
+            <div class="col-xs-2 clearfix">
+            <p>
+                <a href="/gallery/albums/images/album/<?php echo Escaper::h($album->getId()); ?>">
+                    <?php echo Escaper::h($album->getTitle()); ?>
+                </a>
+            </p>
+        </div>
+        </div>
+    <?php endforeach;
+    foreach($this->images as $image): ?>
+        <div>
+            <div class="col-xs-2 clearfix">
+            <p>
+                <a href="/gallery/albums/images/album/<?php echo Escaper::h($image->getId()); ?>">
+                    <?php echo Escaper::h($image->getTitle()); ?>
+                </a>
+            </p>
+        </div>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>No current albums</p>
+<?php endif; ?>
