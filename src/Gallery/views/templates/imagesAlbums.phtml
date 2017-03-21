@@ -3,9 +3,10 @@ use Aura\Html\Escaper;
 
 $this->title()->set("Images and albums");
 
-if(count($this->albums) > 0):
-    foreach($this->albums as $album): ?>
-        <div>
+if(count($this->albums) > 0): ?>
+    <div class="clearfix">
+    <?php foreach($this->albums as $album): ?>
+        <div class="clearfix">
             <div class="col-xs-2 clearfix">
             <p>
                 <a href="/gallery/albums/images/album/<?php echo Escaper::h($album->getId()); ?>">
@@ -13,19 +14,19 @@ if(count($this->albums) > 0):
                 </a>
             </p>
         </div>
-        </div>
-    <?php endforeach;
-    foreach($this->images as $image): ?>
-        <div>
-            <div class="col-xs-2 clearfix">
+    <?php endforeach; ?>
+    </div>
+    <div class="clearfix">
+    <?php foreach($this->images as $image): ?>
+        <div class="col-xs-2 clearfix">
             <p>
                 <a href="/gallery/albums/images/album/<?php echo Escaper::h($image->getId()); ?>">
                     <?php echo Escaper::h($image->getTitle()); ?>
                 </a>
             </p>
         </div>
-        </div>
     <?php endforeach; ?>
+    </div>
 <?php else: ?>
     <p>No current albums</p>
 <?php endif; ?>

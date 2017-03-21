@@ -2,48 +2,33 @@
 
 namespace Gallery\Actions\Gallery;
 
-use Gallery\Models\Album\AlbumService;
-use Gallery\Models\Image\ImageService;
+use Gallery\Models\Gallery\GalleryService;
 use Gallery\Responders\GalleryImagesAlbumsResponder;
 
 class GalleryShowImagesAlbumsAction
 {
     /**
-     * @var AlbumService
+     * @var GalleryService $galleryService
      */
-    protected $albumService;
-
-    /**
-     * @var ImageService $imageService
-     */
-    protected $imageService;
-
-    /**
-     * @var GalleryImagesAlbumsResponder $galleryImagesAlbumsResponder
-     */
-    protected $galleryImagesAlbumsResponder;
+    protected $galleryService;
 
     /**
      * GalleryRootAlbumsAction constructor.
-     * @param AlbumService $albumService
-     * @param ImageService $imageService
+     * @param GalleryService $galleryService
      * @param GalleryImagesAlbumsResponder $galleryImagesAlbumsResponder
      */
     public function __construct(
-        AlbumService $albumService,
-        ImageService $imageService,
+        GalleryService $galleryService,
         GalleryImagesAlbumsResponder $galleryImagesAlbumsResponder)
     {
-        $this->albumService = $albumService;
-        $this->imageService = $imageService;
+        $this->galleryService = $galleryService;
         $this->galleryImagesAlbumsResponder = $galleryImagesAlbumsResponder;
     }
 
     public function __invoke($id)
     {
-        $imagesAlbums = $this->imageService->getImagesAndAlbum($id);
+        $imagesAlbums = $this->galleryService->getImagesAndAlbum($id);
         $this->galleryImagesAlbumsResponder->setPayload($imagesAlbums);
-
         return $this->galleryImagesAlbumsResponder;
     }
 }

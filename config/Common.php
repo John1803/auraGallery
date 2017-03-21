@@ -16,35 +16,35 @@ class Common extends Config
             "password" => "root",
         ];
 
-        $di->params['Gallery\Models\AbstractModel'] = [
-            "pdo" => $di->lazyNew("Aura\Sql\ExtendedPdo")
-        ];
+//        $di->params['Gallery\Models\AbstractModel'] = [
+//            "pdo" => $di->lazyNew("Aura\Sql\ExtendedPdo")
+//        ];
 
-        $di->params['Gallery\Models\Album\AlbumService'] = [
-            "albumMapper" => $di->lazyNew("Gallery\Models\Album\AlbumMapper"),
-            "albumModel" => $di->lazyNew("Gallery\Models\Album\AlbumModel"),
-            "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
-        ];
-
-        $di->params['Gallery\Models\Image\ImageService'] = [
-            "imageMapper" => $di->lazyNew("Gallery\Models\Image\ImageMapper"),
-            "imageModel" => $di->lazyNew("Gallery\Models\Image\ImageModel"),
-            "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
-        ];
+//        $di->params['Gallery\Models\Album\AlbumService'] = [
+//            "albumMapper" => $di->lazyNew("Gallery\Models\Album\AlbumMapper"),
+//            "albumModel" => $di->lazyNew("Gallery\Models\Album\AlbumModel"),
+//            "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
+//        ];
+//
+//        $di->params['Gallery\Models\Image\ImageService'] = [
+//            "imageMapper" => $di->lazyNew("Gallery\Models\Image\ImageMapper"),
+//            "imageModel" => $di->lazyNew("Gallery\Models\Image\ImageModel"),
+//            "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
+//        ];
 
         /**
          * Gallery actions
          */
-        $di->params['Gallery\Actions\Gallery\GalleryRootAlbumsAction'] = [
-            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
-            "galleryResponder" => $di->lazyNew("Gallery\Responders\GalleryResponder"),
-        ];
+//        $di->params['Gallery\Actions\Gallery\GalleryRootAlbumsAction'] = [
+//            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
+//            "galleryResponder" => $di->lazyNew("Gallery\Responders\GalleryResponder"),
+//        ];
 
-        $di->params['Gallery\Actions\Gallery\GalleryShowImagesAlbumsAction'] = [
-            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
-            "imageService" => $di->lazyNew("Gallery\Models\Image\ImageService"),
-            "galleryResponder" => $di->lazyNew("Gallery\Responders\GalleryResponder"),
-        ];
+//        $di->params['Gallery\Actions\Gallery\GalleryShowImagesAlbumsAction'] = [
+//            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
+//            "imageService" => $di->lazyNew("Gallery\Models\Image\ImageService"),
+//            "galleryResponder" => $di->lazyNew("Gallery\Responders\GalleryResponder"),
+//        ];
 
 
 
