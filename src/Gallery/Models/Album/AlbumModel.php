@@ -2,15 +2,10 @@
 
 namespace Gallery\Models\Album;
 
-use Aura\Sql\ExtendedPdo;
+use Gallery\Models\AbstractModel;
 
-class AlbumModel
+class AlbumModel extends AbstractModel
 {
-    public function __construct(ExtendedPdo $pdo)
-    {
-        $this->pdo = $pdo;
-    }
-
     public function fetchAllRootAlbums()
     {
         $rootAlbums = $this->pdo->fetchAll("SELECT a.*
@@ -20,5 +15,26 @@ class AlbumModel
         );
 
         return $rootAlbums;
+    }
+
+    public function fetchDirectDescendantAlbums($id)
+    {
+        $albums = $this->pdo->fetchOne("SELECT descendant.id, 
+                                                descendant.title, 
+                                                descendant.path, 
+                                                descendant.lft, 
+                                                descendant.rgt, 
+                                                descendant.lvl
+                                        FROM albums AS descendant
+                                        JOIN albums AS ancestor
+                                        ON ancestor.id = :id
+                                        AND descendant.lvl > ancestor.lvl
+                                        AND descendant.lvl < ancestor.lvl + 2
+                                        AND descendant.lft
+                                        BETWEEN ancestor.lft AND ancestor.rgt;",
+                                        ["id" => $id, ]
+        );
+
+        return $albums;
     }
 }
