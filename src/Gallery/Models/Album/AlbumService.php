@@ -44,7 +44,7 @@ class AlbumService
         try {
             $rows = $this->albumModel->fetchAllRootAlbums();
             if($rows) {
-                $albums = $this->albumMapper->newAlbumCollection($rows);
+                $albums = $this->albumMapper->newCollection($rows);
                 return $this->payloadFactory->found(["albums" => $albums, ]);
             } else {
                 return $this->payloadFactory->notFound([]);

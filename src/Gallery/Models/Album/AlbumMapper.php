@@ -2,21 +2,12 @@
 
 namespace Gallery\Models\Album;
 
-class AlbumMapper
+use Gallery\Models\AbstractMapper;
+
+class AlbumMapper extends AbstractMapper
 {
-    public function newAlbum($row)
+    public function newEntity($row)
     {
         return new AlbumEntity($row);
-    }
-
-    public function newAlbumCollection($rows)
-    {
-        $newAlbumCollection = [];
-        foreach ($rows as $row) {
-            $album = $this->newAlbum($row);
-            $newAlbumCollection[$album->getTitle()] = $album;
-        }
-
-        return $newAlbumCollection;
     }
 }
