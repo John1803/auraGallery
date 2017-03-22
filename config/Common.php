@@ -24,11 +24,13 @@ class Common extends Config
 //            "pdo" => $di->lazyNew("Aura\Sql\ExtendedPdo")
 //        ];
 
-//        $di->params['Gallery\Models\Album\AlbumService'] = [
-//            "albumMapper" => $di->lazyNew("Gallery\Models\Album\AlbumMapper"),
-//            "albumModel" => $di->lazyNew("Gallery\Models\Album\AlbumModel"),
-//            "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
-//        ];
+
+        $di->params['Gallery\Models\Album\AlbumService'] = [
+            "albumMapper" => $di->lazyNew("Gallery\Models\Album\AlbumMapper"),
+            "albumModel" => $di->lazyNew("Gallery\Models\Album\AlbumModel"),
+            "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
+            "albumForm" => $di->lazyNew("Gallery\Input\AlbumForm"),
+        ];
 //
 //        $di->params['Gallery\Models\Image\ImageService'] = [
 //            "imageMapper" => $di->lazyNew("Gallery\Models\Image\ImageMapper"),
@@ -55,10 +57,10 @@ class Common extends Config
         /**
          * Album's actions
          */
-        $di->params['Gallery\Actions\Gallery\Album\AlbumsEditAction'] = [
-            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
-            "albumEditResponder" => $di->lazyNew("Gallery\Responders\GalleryEditResponder"),
-        ];
+//        $di->params['Gallery\Actions\Gallery\Album\AlbumsEditAction'] = [
+//            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
+//            "albumEditResponder" => $di->lazyNew("Gallery\Responders\GalleryEditResponder"),
+//        ];
 
         /**
          * Config for FOA.Responder_Bundle
@@ -141,9 +143,9 @@ class Common extends Config
                 ->addTokens(["id" => "\d+"])
                 ->addValues(["action" => "show_images_albums"]);
 
-        $router->add("album_form", "/album/form")
+        $router->add("album_new_form", "/album/new")
                 ->addServer(["REQUEST_METHOD" => "GET"])
-                ->addValues(["action" => "album_form_creation"]);
+                ->addValues(["action" => "album_new"]);
 
         $router->add("album_new", "/album/new")
                 ->addServer(["REQUEST_METHOD" => "POST"])
@@ -188,8 +190,8 @@ class Common extends Config
                                 $di->lazyNew("Gallery\Actions\Gallery\GalleryShowImagesAlbumsAction")
         );
 
-        $dispatcher->setObject("album_form_creation",
-                                $di->lazyNew("Gallery\Actions\Album\AlbumFormCreationAction")
+        $dispatcher->setObject("album_new",
+                                $di->lazyNew("Gallery\Actions\Album\AlbumNewAction")
         );
 
         $dispatcher->setObject("album_create",

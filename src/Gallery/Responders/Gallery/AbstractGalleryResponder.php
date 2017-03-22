@@ -1,8 +1,7 @@
 <?php
 
-namespace Gallery\Responders;
+namespace Gallery\Responders\Gallery;
 
-use FOA\DomainPayload\PayloadInterface;
 use FOA\Responder_Bundle\AbstractResponder;
 
 abstract class AbstractGalleryResponder extends AbstractResponder
@@ -14,11 +13,17 @@ abstract class AbstractGalleryResponder extends AbstractResponder
         $templates = [
             "rootAlbums",
             "imagesAlbums",
+            "formAlbum",
+            "galleryEdit",
+            "newAlbum"
+
         ];
 
         $layouts = [
             "base",
             "sidebar",
+            "baseEdit",
+            "sidebarEdit",
         ];
         /**
          * @var \Aura\View\View $auraEngine
@@ -29,7 +34,7 @@ abstract class AbstractGalleryResponder extends AbstractResponder
         foreach ($templates as $template) {
             $view_registry->set(
                 $template,
-                __DIR__ . "../../views/templates/{$template}.phtml"
+                __DIR__ . "../../../views/templates/{$template}.phtml"
             );
         }
 
@@ -37,19 +42,8 @@ abstract class AbstractGalleryResponder extends AbstractResponder
         foreach ($layouts as $layout) {
             $layout_registry->set(
                 $layout,
-                __DIR__ . "../../views/layouts/{$layout}.phtml"
+                __DIR__ . "../../../views/layouts/{$layout}.phtml"
             );
         }
-    }
-
-    public function addPayload(PayloadInterface $payload)
-    {
-        $a = $payload->get();
-
-        foreach ($payload->get() as $key => $value) {
-            $payload->$key = $value;
-        }
-//        $this->payload = array_merge($this->payload->payload, $this->payload->payload);
-        return $this;
     }
 }

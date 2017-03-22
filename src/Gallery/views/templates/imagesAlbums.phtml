@@ -16,6 +16,8 @@ if(count($this->albums) > 0): ?>
         </div>
     <?php endforeach; ?>
     </div>
+<?php endif;
+if(count($this->images) > 0): ?>
     <div class="clearfix">
     <?php foreach($this->images as $image): ?>
         <div class="col-xs-2 clearfix">
@@ -27,6 +29,4 @@ if(count($this->albums) > 0): ?>
         </div>
     <?php endforeach; ?>
     </div>
-<?php else: ?>
-    <p>No current albums</p>
 <?php endif; ?>

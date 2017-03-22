@@ -1,11 +1,12 @@
 <div class="sidebar">
-    <div class="container sidebar-sticky">
+    <div class="sidebar-sticky">
         <div class="sidebar-about">
             <h2>Gallery</h2>
         </div>
 
         <nav class="sidebar-nav">
-            <a class="sidebar-nav-item" href="<?php echo $this->router()->generate("gallery_subalbums_and_images"); ?>">Edit Gallery</a>
+            <a class="sidebar-nav-item" href="<?php echo $this->router()->generate("gallery_edit"); ?>">Edit Gallery</a>
+            <a class="sidebar-nav-item" href="<?php echo $this->router()->generate("album_new"); ?>">New album</a>
 
         </nav>
     </div>

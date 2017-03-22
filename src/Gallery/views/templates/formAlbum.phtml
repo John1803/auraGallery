@@ -1,0 +1,26 @@
+<?php
+echo $this->form([
+    'method' => $method,
+    'action' => $action,
+    'enctype' => "application/x-www-form-urlencoded",
+    ]
+);
+    /**
+     * @var \Gallery\Input\AlbumForm $albumForm
+     */
+echo $this->input(
+    $albumForm->get("album")
+);
+
+echo $this->input(
+    $albumForm->get("albumId")
+);
+
+echo $this->input([
+    'type' => 'submit',
+    'name' => 'submit',
+    'value' => $submit,
+    ]
+);
+
+echo $this->tag('/form');

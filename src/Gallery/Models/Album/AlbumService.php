@@ -3,6 +3,7 @@
 namespace Gallery\Models\Album;
 
 use FOA\DomainPayload\PayloadFactory;
+use Gallery\Input\AlbumForm;
 
 class AlbumService
 {
@@ -17,6 +18,11 @@ class AlbumService
     protected $albumModel;
 
     /**
+     * @var AlbumForm $albumForm
+     */
+    protected $albumForm;
+
+    /**
      * @var PayloadFactory $payloadFactory
      */
     protected $payloadFactory;
@@ -25,18 +31,22 @@ class AlbumService
      * AlbumService constructor.
      * @param AlbumMapper $albumMapper
      * @param AlbumModel $albumModel
+     * @param AlbumForm $albumForm
      * @param PayloadFactory $payloadFactory
      */
 
     public function __construct(
         AlbumMapper $albumMapper,
         AlbumModel $albumModel,
-        PayloadFactory $payloadFactory
+        PayloadFactory $payloadFactory,
+        AlbumForm $albumForm
     )
     {
         $this->albumMapper = $albumMapper;
         $this->albumModel = $albumModel;
         $this->payloadFactory = $payloadFactory;
+        $this->albumForm = $albumForm;
+
     }
 
     public function getRootAlbums()
@@ -67,5 +77,13 @@ class AlbumService
         } catch (\Exception $e) {
             return $this->payloadFactory->error(["exception" => $e, ]);
         }
+    }
+
+    public function newAlbum(array $data)
+    {
+        return $this->payloadFactory->newEntity([
+            'album' => $this->albumMapper->newEntity($data),
+            'albumForm' => $this->albumForm
+        ]);
     }
 }

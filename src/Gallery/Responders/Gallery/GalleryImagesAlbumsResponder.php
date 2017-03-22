@@ -1,8 +1,8 @@
 <?php
 
-namespace Gallery\Responders;
+namespace Gallery\Responders\Gallery;
 
-class GalleryResponder extends AbstractGalleryResponder
+class GalleryImagesAlbumsResponder extends AbstractGalleryResponder
 {
     protected $payload_method = array(
         "FOA\DomainPayload\Found" => "found",
@@ -11,6 +11,6 @@ class GalleryResponder extends AbstractGalleryResponder
 
     protected function found()
     {
-        $this->renderView("rootAlbums", "base");
+        $this->renderView("imagesAlbums", "base");
     }
 }
