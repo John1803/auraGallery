@@ -4,10 +4,7 @@ namespace Gallery\Responders\Gallery;
 
 class GalleryEditResponder extends AbstractGalleryResponder
 {
-    protected $payload_method = array(
-        "FOA\DomainPayload\Found" => "found",
-        "FOA\DomainPayload\NotFound" => "notFound",
-    );
+    protected $payload_method = ['FOA\DomainPayload\Found' => "found", ];
 
     protected function found()
     {

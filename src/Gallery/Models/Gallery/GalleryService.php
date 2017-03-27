@@ -7,6 +7,7 @@ use Gallery\Models\Album\AlbumMapper;
 use Gallery\Models\Album\AlbumModel;
 use Gallery\Models\Image\ImageMapper;
 use Gallery\Models\Image\ImageModel;
+use Gallery\Input\AlbumForm;
 
 class GalleryService
 {
@@ -31,16 +32,22 @@ class GalleryService
     protected $albumModel;
 
     /**
+     * @var AlbumForm $albumForm
+     */
+    protected $albumForm;
+
+    /**
      * @var PayloadFactory $payloadFactory
      */
     protected $payloadFactory;
 
     /**
-     * ImageService constructor.
+     * GalleryService constructor.
      * @param AlbumMapper $albumMapper
      * @param AlbumModel $albumModel
      * @param ImageMapper $imageMapper
      * @param ImageModel $imageModel
+     * @param AlbumForm $albumForm
      * @param PayloadFactory $payloadFactory
      */
 
@@ -49,6 +56,7 @@ class GalleryService
         AlbumModel $albumModel,
         ImageMapper $imageMapper,
         ImageModel $imageModel,
+        AlbumForm $albumForm,
         PayloadFactory $payloadFactory
     )
     {
@@ -56,6 +64,7 @@ class GalleryService
         $this->imageModel = $imageModel;
         $this->albumMapper = $albumMapper;
         $this->albumModel = $albumModel;
+        $this->albumForm = $albumForm;
         $this->payloadFactory = $payloadFactory;
     }
 
@@ -67,15 +76,46 @@ class GalleryService
             if($imagesRows || $albumsRows) {
                 $images = $this->imageMapper->newCollection($imagesRows);
                 $albums = $this->albumMapper->newCollection($albumsRows);
-                return $this->payloadFactory->found(["images" => $images,
-                        "albums" => $albums,
-                    ]
+                return $this->payloadFactory->found(['images' => $images,
+                                                    'albums' => $albums, ]
                 );
+
             } else {
                 return $this->payloadFactory->notFound([]);
             }
         } catch (\Exception $e) {
-            return $this->payloadFactory->error(["exception" => $e, ]);
+            return $this->payloadFactory->error(['exception' => $e, ]);
+        }
+    }
+
+    public function getEditAlbumsImages($id = null)
+    {
+        try {
+            if (null === $id) {
+                $album = $this->albumMapper->newEntity(['id' => 0]);
+                $albumsRows = $this->albumModel->fetchAllRootAlbums();
+                $albums = $this->albumMapper->newCollection($albumsRows);
+                $images = $this->imageMapper->newEntity([]);
+                return $this->payloadFactory->found(['album' => $album,
+                        'albums' => $albums,
+                        'albumForm' => $this->albumForm,
+                        'images' => $images, ]
+                );
+            } else {
+                $albumRow = $this->albumModel->fetchAlbumById($id);
+                $imagesRows = $this->imageModel->fetchImagesOfAlbum($id);
+                $albumsRows = $this->albumModel->fetchDirectDescendantAlbums($id);
+                $album = $this->albumMapper->newEntity($albumRow);
+                $images = $this->imageMapper->newCollection($imagesRows);
+                $albums = $this->albumMapper->newCollection($albumsRows);
+                return $this->payloadFactory->found(['album' => $album,
+                                                        'albums' => $albums,
+                                                        'albumForm' => $this->albumForm,
+                                                        'images' => $images, ]
+                );
+            }
+        } catch (\Exception $e) {
+            return $this->payloadFactory->error(['exception' => $e, ]);
         }
     }
 }

@@ -10,6 +10,11 @@ class AlbumEntity
     protected $id;
 
     /**
+     * @var int|null
+     */
+    protected $parent;
+
+    /**
      * @var string
      */
     protected $title;
@@ -18,7 +23,6 @@ class AlbumEntity
      * @var string
      */
     protected $path;
-
 
     /**
      * Field is used to store the tree left value
@@ -75,6 +79,14 @@ class AlbumEntity
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 
     /**

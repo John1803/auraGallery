@@ -4,10 +4,10 @@ namespace Gallery\Actions\Gallery;
 
 class GalleryEditAction extends AbstractGalleryAction
 {
-    public function __invoke()
+    public function __invoke($id = null)
     {
-        $albums = $this->albumService->getRootAlbums();
-        $this->galleryEditResponder->setPayload($albums);
+        $albumImagesFormCreation = $this->galleryService->getEditAlbumsImages($id);
+        $this->galleryEditResponder->setPayload($albumImagesFormCreation);
         return $this->galleryEditResponder;
     }
 }

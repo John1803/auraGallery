@@ -11,15 +11,7 @@ class AlbumForm extends Form
         $this->setField("album", "text")
                 ->setAttribs([
                     'id' => "album",
-                    'name' => "title",
-                ]
-        );
-
-        $this->setField("albumId", "hidden")
-                ->setAttribs([
-                    'id' => "albumId",
-                    'name' => "parent",
-                    ''
+                    'name' => "album[title]",
                 ]
         );
     }

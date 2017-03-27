@@ -1,4 +1,5 @@
 <?php
+
 echo $this->form([
     'method' => $method,
     'action' => $action,
@@ -12,9 +13,11 @@ echo $this->input(
     $albumForm->get("album")
 );
 
-echo $this->input(
-    $albumForm->get("albumId")
-);
+echo $this->input([
+    'type'    => "hidden",
+    'name'    => "album[parent]",
+    'value'   => $album->getId(),
+]);
 
 echo $this->input([
     'type' => 'submit',

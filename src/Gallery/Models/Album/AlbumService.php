@@ -23,6 +23,11 @@ class AlbumService
     protected $albumForm;
 
     /**
+     * @var AlbumDataHandler $albumDataHandler
+     */
+    protected $albumDataHandler;
+
+    /**
      * @var PayloadFactory $payloadFactory
      */
     protected $payloadFactory;
@@ -31,6 +36,7 @@ class AlbumService
      * AlbumService constructor.
      * @param AlbumMapper $albumMapper
      * @param AlbumModel $albumModel
+     * @param AlbumDataHandler $albumDataHandler
      * @param AlbumForm $albumForm
      * @param PayloadFactory $payloadFactory
      */
@@ -38,12 +44,14 @@ class AlbumService
     public function __construct(
         AlbumMapper $albumMapper,
         AlbumModel $albumModel,
+        AlbumDataHandler $albumDataHandler,
         PayloadFactory $payloadFactory,
         AlbumForm $albumForm
     )
     {
         $this->albumMapper = $albumMapper;
         $this->albumModel = $albumModel;
+        $this->albumDataHandler = $albumDataHandler;
         $this->payloadFactory = $payloadFactory;
         $this->albumForm = $albumForm;
 
@@ -85,5 +93,23 @@ class AlbumService
             'album' => $this->albumMapper->newEntity($data),
             'albumForm' => $this->albumForm
         ]);
+    }
+
+    public function createAlbum(array $data)
+    {
+        try {
+            $preparedData = $this->albumDataHandler->prepareData($data);
+            $albumRow = $this->albumModel->create($preparedData);
+            if ($albumRow) {
+                $album = $this->albumMapper->newEntity($albumRow);
+                return $this->payloadFactory->created(['album' => $album,
+                                                        'albumForm' => $this->albumForm, ]
+                );
+            }
+        } catch (\Exception $e) {
+            return $this->payloadFactory->error(['exception' => $e,
+                    'data' => $data, ]
+            );
+        }
     }
 }

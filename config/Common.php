@@ -135,6 +135,11 @@ class Common extends Config
         $router->add("gallery_edit", "/gallery/edit")
             ->addValues(["action" => "gallery_edit"]);
 
+        $router->add("gallery_edit_album_subalbums_image", "/edit/albums/images/{id}")
+            ->addTokens(['id' => "\d+"])
+            ->addValues(['action' => "gallery_edit_album_subalbums_image", ])
+        ;
+
         /**
          * Images and Subalbums of certain album
          */
@@ -199,6 +204,10 @@ class Common extends Config
         );
 
         $dispatcher->setObject("gallery_edit",
+                                $di->lazyNew("Gallery\Actions\Gallery\GalleryEditAction")
+        );
+
+        $dispatcher->setObject("gallery_edit_album_subalbums_image",
                                 $di->lazyNew("Gallery\Actions\Gallery\GalleryEditAction")
         );
 

@@ -1,13 +1,13 @@
-<?php $this->title()->set('New Album'); ?>
 <h3>New Album</h3>
 
-<?php echo $this->render(
+<?php
+/** @var \Aura\View\View $this */
+echo $this->render(
     'formAlbum',
-    array(
-        'method' => 'POST',
+    ['method' => 'POST',
         'action' => '/album/new',
         'submit' => 'Create',
         'album' => $this->album,
         'albumForm' => $this->albumForm,
-    )
+    ]
 ); ?>
