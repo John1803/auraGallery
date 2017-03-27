@@ -12,4 +12,9 @@ class GalleryResponder extends AbstractGalleryResponder
     {
         $this->renderView("rootAlbums", "base");
     }
+
+    protected function notFound()
+    {
+        $this->renderView("rootAlbums", "base");
+    }
 }

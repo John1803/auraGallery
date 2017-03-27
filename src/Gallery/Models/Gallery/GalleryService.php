@@ -81,7 +81,8 @@ class GalleryService
                 );
 
             } else {
-                return $this->payloadFactory->notFound([]);
+                $albums = $this->albumMapper->newEntity([]);
+                return $this->payloadFactory->notFound(['albums' => $albums, ]);
             }
         } catch (\Exception $e) {
             return $this->payloadFactory->error(['exception' => $e, ]);

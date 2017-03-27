@@ -75,7 +75,8 @@ class AlbumService
                 $albums = $this->albumMapper->newCollection($rows);
                 return $this->payloadFactory->found(["albums" => $albums, ]);
             } else {
-                return $this->payloadFactory->notFound([]);
+                $albums = [];
+                return $this->payloadFactory->notFound(['albums' => $albums, ]);
             }
         } catch (\Exception $e) {
             return $this->payloadFactory->error(["exception" => $e, ]);
