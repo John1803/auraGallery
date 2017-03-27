@@ -10,57 +10,30 @@ class Common extends Config
     {
         $di->set('aura/project-kernel:logger', $di->lazyNew('Monolog\Logger'));
 
+        $di->params['Gallery\Models\Album\AlbumService'] = [
+            'albumMapper' => $di->lazyNew("Gallery\Models\Album\AlbumMapper"),
+            'albumModel' => $di->lazyNew("Gallery\Models\Album\AlbumModel"),
+            'albumDataHandler' => $di->lazyNew("Gallery\Models\Album\AlbumDataHandler"),
+            'filesystem' => $di->lazyNew("Filesystem\Filesystem"),
+            'payloadFactory' => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
+            'albumForm' => $di->lazyNew("Gallery\Input\AlbumForm"),
+        ];
+
+        $di->params['Gallery\Models\Album\AlbumDataHandler'] = [
+            'albumModel' => $di->lazyNew("Gallery\Models\Album\AlbumModel"),
+            'path' => ".." . DIRECTORY_SEPARATOR . "web" . DIRECTORY_SEPARATOR . "albums" . DIRECTORY_SEPARATOR,
+        ];
+
         $di->params['Aura\Sql\ExtendedPdo'] = [
-            "dsn" => "mysql:dbname=stoaj;host=127.0.0.1",
-            "username" => "root",
-            "password" => "root",
+            'dsn' => "mysql:dbname=stoaj;host=127.0.0.1",
+            'username' => "root",
+            'password' => "root",
         ];
 
         $di->params['Html\Helper\Router'] = [
-            "router" => $di->lazyGet('aura/web-kernel:router')
+            'router' => $di->lazyGet('aura/web-kernel:router')
         ];
         $di->params['Aura\Html\HelperLocator']['map']["router"] = $di->lazyNew('Html\Helper\Router');
-//        $di->params['Gallery\Models\AbstractModel'] = [
-//            "pdo" => $di->lazyNew("Aura\Sql\ExtendedPdo")
-//        ];
-
-
-        $di->params['Gallery\Models\Album\AlbumService'] = [
-            "albumMapper" => $di->lazyNew("Gallery\Models\Album\AlbumMapper"),
-            "albumModel" => $di->lazyNew("Gallery\Models\Album\AlbumModel"),
-            "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
-            "albumForm" => $di->lazyNew("Gallery\Input\AlbumForm"),
-        ];
-//
-//        $di->params['Gallery\Models\Image\ImageService'] = [
-//            "imageMapper" => $di->lazyNew("Gallery\Models\Image\ImageMapper"),
-//            "imageModel" => $di->lazyNew("Gallery\Models\Image\ImageModel"),
-//            "payloadFactory" => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
-//        ];
-
-        /**
-         * Gallery actions
-         */
-//        $di->params['Gallery\Actions\Gallery\GalleryRootAlbumsAction'] = [
-//            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
-//            "galleryResponder" => $di->lazyNew("Gallery\Responders\GalleryResponder"),
-//        ];
-
-//        $di->params['Gallery\Actions\Gallery\GalleryShowImagesAlbumsAction'] = [
-//            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
-//            "imageService" => $di->lazyNew("Gallery\Models\Image\ImageService"),
-//            "galleryResponder" => $di->lazyNew("Gallery\Responders\GalleryResponder"),
-//        ];
-
-
-
-        /**
-         * Album's actions
-         */
-//        $di->params['Gallery\Actions\Gallery\Album\AlbumsEditAction'] = [
-//            "albumService" => $di->lazyNew("Gallery\Models\Album\AlbumService"),
-//            "albumEditResponder" => $di->lazyNew("Gallery\Responders\GalleryEditResponder"),
-//        ];
 
         /**
          * Config for FOA.Responder_Bundle

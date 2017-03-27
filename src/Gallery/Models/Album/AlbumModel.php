@@ -60,12 +60,13 @@ class AlbumModel extends AbstractModel
     {
         $sql = "UPDATE albums SET rgt = rgt + 2 WHERE rgt >= :leftPosition;
                 UPDATE albums SET lft = lft + 2 WHERE lft >= :leftPosition;
-                INSERT INTO albums(parent, title, lft, rgt, lvl) 
-                VALUES(:parent, :title, :leftPosition, :leftPosition + 1, :levelPosition);";
+                INSERT INTO albums(parent, title, path, lft, rgt, lvl) 
+                VALUES(:parent, :title, :path, :leftPosition, :leftPosition + 1, :levelPosition);";
 
         $this->pdo->beginTransaction();
             $this->pdo->perform($sql, ['parent' => $data['parent'],
                                         'title' => $data['title'],
+                                        'path' => $data['path'],
                                         'leftPosition' => $data['lft'],
                                         'levelPosition' => $data['lvl'],]
             );

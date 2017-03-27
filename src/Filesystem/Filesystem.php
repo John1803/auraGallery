@@ -2,7 +2,7 @@
 
 namespace Filesystem;
 
-class Filesystem
+class Filesystem implements FilesystemInterface
 {
     /**
      * @param $dirs

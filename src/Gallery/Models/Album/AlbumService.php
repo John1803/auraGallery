@@ -2,6 +2,8 @@
 
 namespace Gallery\Models\Album;
 
+use Filesystem\Filesystem;
+use Filesystem\FilesystemInterface;
 use FOA\DomainPayload\PayloadFactory;
 use Gallery\Input\AlbumForm;
 
@@ -28,6 +30,11 @@ class AlbumService
     protected $albumDataHandler;
 
     /**
+     * @var FilesystemInterface $filesystem
+     */
+
+    protected $filesystem;
+    /**
      * @var PayloadFactory $payloadFactory
      */
     protected $payloadFactory;
@@ -37,6 +44,7 @@ class AlbumService
      * @param AlbumMapper $albumMapper
      * @param AlbumModel $albumModel
      * @param AlbumDataHandler $albumDataHandler
+     * @param FilesystemInterface $filesystem
      * @param AlbumForm $albumForm
      * @param PayloadFactory $payloadFactory
      */
@@ -45,6 +53,7 @@ class AlbumService
         AlbumMapper $albumMapper,
         AlbumModel $albumModel,
         AlbumDataHandler $albumDataHandler,
+        FilesystemInterface $filesystem,
         PayloadFactory $payloadFactory,
         AlbumForm $albumForm
     )
@@ -52,6 +61,7 @@ class AlbumService
         $this->albumMapper = $albumMapper;
         $this->albumModel = $albumModel;
         $this->albumDataHandler = $albumDataHandler;
+        $this->filesystem = $filesystem;
         $this->payloadFactory = $payloadFactory;
         $this->albumForm = $albumForm;
 
@@ -102,6 +112,7 @@ class AlbumService
             $albumRow = $this->albumModel->create($preparedData);
             if ($albumRow) {
                 $album = $this->albumMapper->newEntity($albumRow);
+                $this->filesystem->mkdir($album->getPath());
                 return $this->payloadFactory->created(['album' => $album,
                                                         'albumForm' => $this->albumForm, ]
                 );

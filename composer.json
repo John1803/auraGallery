@@ -21,7 +21,8 @@
         "aura/sql": "2.*",
         "foa/html-view-bundle": "2.*",
         "foa/responder-bundle": "^0.4.1",
-        "aura/input": "^1.2"
+        "aura/input": "^1.2",
+        "aura/payload": "^3.0"
     },
     "autoload": {
         "psr-4": {
