@@ -15,8 +15,10 @@ $this->title()->set("Edit Images and albums"); ?>
                     <?php echo Escaper::h($album->getTitle()); ?>
                 </a>
             </p>
-             <p><?php echo $this->a("/edit/album/{$album->getId()}", "Edit"); ?> |
-                <?php echo $this->a("/edit/delete/{$album->getId()}", "Delete"); ?></p>
+             <p><?php echo $this->a("#", "Edit"); ?> |
+                <?php echo $this->a("#", "Delete"); ?></p>
+<!--                <p>--><?php //echo $this->a("/edit/album/{$album->getId()}", "Edit"); ?><!-- |-->
+<!--                --><?php //echo $this->a("/edit/delete/{$album->getId()}", "Delete"); ?><!--</p>-->
         </div>
     <?php endforeach; ?>
     </div>
@@ -30,8 +32,10 @@ $this->title()->set("Edit Images and albums"); ?>
                     <?php echo Escaper::h($image->getTitle()); ?>
                 </a>
             </p>
-            <p><?php echo $this->a("/edit/image/{$image->getId()}", "Edit"); ?> |
-                <?php echo $this->a("/edit/delete/{$image->getId()}", "Delete"); ?></p>
+            <p><?php echo $this->a("#", "Edit"); ?> |
+                <?php echo $this->a("#", "Delete"); ?></p>
+<!--            <p>--><?php //echo $this->a("/edit/image/{$image->getId()}", "Edit"); ?><!-- |-->
+<!--                --><?php //echo $this->a("/edit/delete/{$image->getId()}", "Delete"); ?><!--</p>-->
         </div>
     <?php endforeach; ?>
     </div>

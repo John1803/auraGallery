@@ -1,4 +1,6 @@
 /composer.lock
 /tmp/*
 !/tmp/.placeholder
+!/tmp/stoaj.sql
 /vendor
+/web/albums

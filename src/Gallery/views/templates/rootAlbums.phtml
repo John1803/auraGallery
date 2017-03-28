@@ -15,6 +15,6 @@ if(count($this->albums) > 0):
         </div>
         <?php endforeach; ?>
 <?php else: ?>
-    <p>No current albums</p>
+    <p>No current albums. <a href="<?php echo $this->router()->generate("gallery_edit"); ?>">Create</a> first album!</p>
 <?php endif; ?>
 
