@@ -44,7 +44,7 @@ class AlbumDataHandler
             $albumAncestor = $this->albumModel->fetchAlbumById($albumData['parent']);
             $albumHandledData = $this->prepareDescendantData($albumAncestor, $albumData);
             $albumData = $this->mergeReceivedHandledData($albumData, $albumHandledData);
-        }  else if (($albumLastSibling = $this->albumModel->fetchAlbumWithMaxRightProperty()) ||
+        }  elseif (($albumLastSibling = $this->albumModel->fetchAlbumWithMaxRightProperty()) ||
                     false === $albumLastSibling) {
                     if (false === $albumLastSibling) {
                         $albumLastSibling = ['parent' => null, 'lft' => 0, 'rgt' => 0, 'lvl' => 0];
@@ -52,6 +52,7 @@ class AlbumDataHandler
             $albumHandledData = $this->prepareSiblingData($albumLastSibling, $albumData);
             $albumData = $this->mergeReceivedHandledData($albumData, $albumHandledData);
         }
+
         return $albumData;
     }
 

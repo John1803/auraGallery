@@ -7,6 +7,10 @@ use Filesystem\FilesystemInterface;
 use FOA\DomainPayload\PayloadFactory;
 use Gallery\Input\AlbumForm;
 
+/**
+ * Class AlbumService
+ * @package Gallery\Models\Album
+ */
 class AlbumService
 {
     /**
@@ -56,8 +60,7 @@ class AlbumService
         FilesystemInterface $filesystem,
         PayloadFactory $payloadFactory,
         AlbumForm $albumForm
-    )
-    {
+    ) {
         $this->albumMapper = $albumMapper;
         $this->albumModel = $albumModel;
         $this->albumDataHandler = $albumDataHandler;
@@ -74,30 +77,55 @@ class AlbumService
             if($rows) {
                 $albums = $this->albumMapper->newCollection($rows);
                 return $this->payloadFactory->found(["albums" => $albums, ]);
-            } else {
-                $albums = [];
-                return $this->payloadFactory->notFound(['albums' => $albums, ]);
             }
+            $albums = [];
+            return $this->payloadFactory->notFound(['albums' => $albums, ]);
+
         } catch (\Exception $e) {
             return $this->payloadFactory->error(["exception" => $e, ]);
         }
     }
 
+    /**
+     * @param int $id
+     * @return \FOA\DomainPayload\Error|\FOA\DomainPayload\Found|\FOA\DomainPayload\NotFound
+     */
     public function getDirectDescendantAlbums($id)
     {
         try {
             $rows = $this->albumModel->fetchDirectDescendantAlbums($id);
             if($rows) {
                 $albums = $this->albumMapper->newCollection($rows);
-                return $this->payloadFactory->found(["albums" => $albums, ]);
-            } else {
-                return $this->payloadFactory->notFound([]);
+                return $this->payloadFactory->found(['albums' => $albums, ]);
             }
+
+            return $this->payloadFactory->notFound([]);
+
         } catch (\Exception $e) {
-            return $this->payloadFactory->error(["exception" => $e, ]);
+            return $this->payloadFactory->error(['exception' => $e, ]);
         }
     }
 
+    /**
+     * @return \FOA\DomainPayload\Error| \FOA\DomainPayload\Found| \FOA\DomainPayload\NotFound
+     */
+    public function getAlbumsTree()
+    {
+        try {
+            $rows = $this->albumModel->fetchAlbumsTree();
+            if($rows) {
+                $albums = $this->albumMapper->newCollection($rows);
+                return $this->payloadFactory->found(['albums' => $albums, ]);
+            }
+            return $this->payloadFactory->notFound([]);
+        } catch (\Exception $e) {
+            return $this->payloadFactory->error(['exception' => $e, ]);
+        }
+    }
+    /**
+     * @param array $data
+     * @return \FOA\DomainPayload\NewEntity
+     */
     public function newAlbum(array $data)
     {
         return $this->payloadFactory->newEntity([
@@ -106,6 +134,10 @@ class AlbumService
         ]);
     }
 
+    /**
+     * @param array $data
+     * @return \FOA\DomainPayload\Created|\FOA\DomainPayload\Error
+     */
     public function createAlbum(array $data)
     {
         try {

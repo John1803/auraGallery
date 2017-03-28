@@ -11,19 +11,21 @@ abstract class AbstractGalleryResponder extends AbstractResponder
         parent::init();
 
         $templates = [
-            "rootAlbums",
-            "imagesAlbums",
-            "formAlbum",
-            "galleryEdit",
-            "newAlbum"
+            'rootAlbums',
+            'albumsImages',
+            'albumForm',
+            'galleryEdit',
+            'albumNew',
+            'imageForm',
+            'imageNew'
 
         ];
 
         $layouts = [
-            "base",
-            "sidebar",
-            "baseEdit",
-            "sidebarEdit",
+            'base',
+            'sidebar',
+            'baseEdit',
+            'sidebarEdit',
         ];
         /**
          * @var \Aura\View\View $auraEngine
@@ -34,7 +36,7 @@ abstract class AbstractGalleryResponder extends AbstractResponder
         foreach ($templates as $template) {
             $view_registry->set(
                 $template,
-                __DIR__ . "../../../views/templates/{$template}.phtml"
+                __DIR__ . '../../../views/templates/' . $template . '.phtml'
             );
         }
 
@@ -42,7 +44,7 @@ abstract class AbstractGalleryResponder extends AbstractResponder
         foreach ($layouts as $layout) {
             $layout_registry->set(
                 $layout,
-                __DIR__ . "../../../views/layouts/{$layout}.phtml"
+                __DIR__ . '../../../views/layouts/' . $layout . '.phtml'
             );
         }
     }

@@ -8,6 +8,10 @@ use Gallery\Responders\Gallery\GalleryEditResponder;
 use Gallery\Responders\Gallery\GalleryImagesAlbumsResponder;
 use Gallery\Responders\Gallery\GalleryResponder;
 
+/**
+ * Class AbstractGalleryAction
+ * @package Gallery\Actions\Gallery
+ */
 class AbstractGalleryAction
 {
     /**

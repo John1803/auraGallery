@@ -1,56 +1,76 @@
 <?php
 namespace Aura\Framework_Project\_Config;
 
+use Aura\Accept\Accept;
 use Aura\Di\Config;
 use Aura\Di\Container;
+use Aura\Html\HelperLocator;
+use Aura\Sql\ExtendedPdo;
+use Aura\View\View;
+use Filesystem\Filesystem;
+use FOA\DomainPayload\PayloadFactory;
+use FOA\Responder_Bundle\AbstractResponder;
+use FOA\Responder_Bundle\Renderer\AuraView;
+use Gallery\Actions\Album\AlbumCreateAction;
+use Gallery\Actions\Album\AlbumsEditAlbumAction;
+use Gallery\Actions\Gallery\GalleryEditAction;
+use Gallery\Actions\Gallery\GalleryRootAlbumsAction;
+use Gallery\Actions\Gallery\GalleryShowImagesAlbumsAction;
+use Gallery\Actions\Image\ImageNewAction;
+use Gallery\Actions\Image\ImageUploadAction;
+use Gallery\Input\AlbumForm;
+use Gallery\Models\Album\AlbumDataHandler;
+use Gallery\Models\Album\AlbumMapper;
+use Gallery\Models\Album\AlbumModel;
+use Gallery\Models\Album\AlbumService;
+use Html\Helper\Router;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 class Common extends Config
 {
     public function define(Container $di)
     {
-        $di->set('aura/project-kernel:logger', $di->lazyNew('Monolog\Logger'));
+        $di->set('aura/project-kernel:logger', $di->lazyNew(Logger::class));
 
-        $di->params['Gallery\Models\Album\AlbumService'] = [
-            'albumMapper' => $di->lazyNew("Gallery\Models\Album\AlbumMapper"),
-            'albumModel' => $di->lazyNew("Gallery\Models\Album\AlbumModel"),
-            'albumDataHandler' => $di->lazyNew("Gallery\Models\Album\AlbumDataHandler"),
-            'filesystem' => $di->lazyNew("Filesystem\Filesystem"),
-            'payloadFactory' => $di->lazyNew("FOA\DomainPayload\PayloadFactory"),
-            'albumForm' => $di->lazyNew("Gallery\Input\AlbumForm"),
+        $di->params[AlbumDataHandler::class] = [
+            'albumModel' => $di->lazyNew(AlbumModel::class),
+            'path' => '..' . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'albums' . DIRECTORY_SEPARATOR,
         ];
 
-        $di->params['Gallery\Models\Album\AlbumDataHandler'] = [
-            'albumModel' => $di->lazyNew("Gallery\Models\Album\AlbumModel"),
-            'path' => ".." . DIRECTORY_SEPARATOR . "web" . DIRECTORY_SEPARATOR . "albums" . DIRECTORY_SEPARATOR,
+        $di->params[AlbumService::class] = [
+            'albumMapper' => $di->lazyNew(AlbumMapper::class),
+            'albumModel' => $di->lazyNew(AlbumModel::class),
+            'albumDataHandler' => $di->lazyNew(AlbumDataHandler::class),
+            'filesystem' => $di->lazyNew(Filesystem::class),
+            'payloadFactory' => $di->lazyNew(PayloadFactory::class),
+            'albumForm' => $di->lazyNew(AlbumForm::class),
         ];
 
-        $di->params['Aura\Sql\ExtendedPdo'] = [
-            'dsn' => "mysql:dbname=stoaj;host=127.0.0.1",
-            'username' => "root",
-            'password' => "root",
+        $di->params[ExtendedPdo::class] = [
+            'dsn' => 'mysql:dbname=stoaj;host=127.0.0.1',
+            'username' => 'root',
+            'password' => 'root',
         ];
 
-        $di->params['Html\Helper\Router'] = [
+        $di->params[Router::class] = [
             'router' => $di->lazyGet('aura/web-kernel:router')
         ];
-        $di->params['Aura\Html\HelperLocator']['map']["router"] = $di->lazyNew('Html\Helper\Router');
+        $di->params[HelperLocator::class]['map']['router'] = $di->lazyNew(Router::class);
 
         /**
          * Config for FOA.Responder_Bundle
          */
-        $di->params['FOA\Responder_Bundle\Renderer\AuraView'] = [
-            "engine" => $di->lazyNew('Aura\View\View'),
+        $di->params[AuraView::class] = [
+            'engine' => $di->lazyNew(View::class),
         ];
 
-        $di->params['FOA\Responder_Bundle\AbstractResponder'] = [
-            "response" => $di->lazyGet('aura/web-kernel:response'),
-            "accept" => $di->lazyNew('Aura\Accept\Accept'),
-            "renderer" => $di->lazyNew('FOA\Responder_Bundle\Renderer\AuraView'),
-        ];
-
-        $di->params['Gallery\Actions\HelloBaby'] = array(
+        $di->params[AbstractResponder::class] = [
             'response' => $di->lazyGet('aura/web-kernel:response'),
-        );
+            'accept' => $di->lazyNew(Accept::class),
+            'renderer' => $di->lazyNew(AuraView::class),
+        ];
+
     }
 
     public function modify(Container $di)
@@ -69,7 +89,7 @@ class Common extends Config
 
         $logger = $di->get('aura/project-kernel:logger');
         $logger->pushHandler($di->newInstance(
-            'Monolog\Handler\StreamHandler',
+            StreamHandler::class,
             array(
                 'stream' => $file,
             )
@@ -102,45 +122,48 @@ class Common extends Config
         $router->add('hello_baby', '/baby')
                ->addValues(array('action' => 'hello_baby'));
 
-        $router->add("gallery_root_albums", "/")
-                ->addValues(["action" => "root_albums"]);
+        $router->add('gallery_root_albums', '/')
+                ->addValues(['action' => 'root_albums']);
 
-        $router->add("gallery_edit", "/gallery/edit")
-            ->addValues(["action" => "gallery_edit"]);
+        $router->add('gallery_edit', '/gallery/edit')
+            ->addValues(['action' => 'gallery_edit']);
 
-        $router->add("gallery_edit_album_subalbums_image", "/edit/albums/images/{id}")
-            ->addTokens(['id' => "\d+"])
-            ->addValues(['action' => "gallery_edit_album_subalbums_image", ])
+        $router->add('gallery_edit_album_subalbums_image', '/edit/albums/images/{id}')
+            ->addTokens(['id' => '\d+'])
+            ->addValues(['action' => 'gallery_edit_album_subalbums_image', ])
         ;
 
         /**
          * Images and Subalbums of certain album
          */
 
-        $router->add("gallery_subalbums_and_images", "/gallery/albums/images/album/{id}")
-                ->addTokens(["id" => "\d+"])
-                ->addValues(["action" => "show_images_albums"]);
+        $router->add('gallery_subalbums_and_images', '/gallery/albums/images/album/{id}')
+                ->addTokens(['id' => '\d+'])
+                ->addValues(['action' => 'show_images_albums']);
 
-        $router->add("album_new_form", "/album/new")
-                ->addServer(["REQUEST_METHOD" => "GET"])
-                ->addValues(["action" => "album_new"]);
+        $router->add('album_new_form', '/album/new')
+                ->addServer(['REQUEST_METHOD' => 'GET'])
+                ->addValues(['action' => 'album_new']);
 
-        $router->add("album_new", "/album/new")
-                ->addServer(["REQUEST_METHOD" => "POST"])
-                ->addValues(["action" => "album_create"]);
+        $router->add('album_new', '/album/new')
+                ->addServer(['REQUEST_METHOD' => 'POST'])
+                ->addValues(['action' => 'album_create']);
             
 
 
-        $router->add("albums_edit_album", "/edit/album/{id}")
-                ->addTokens(["id" => "\d+"])
-                ->addValues(["action" => "albums_edit_album"]);
+        $router->add('albums_edit_album', '/edit/album/{id}')
+                ->addTokens(['id' => '\d+'])
+                ->addValues(['action' => 'albums_edit_album']);
 
-        $router->add("image_form_upload", "/image/form-upload")
-                ->addValues(["action" => "image_form"]);
 
-        $router->add("image_upload", "/upload/image")
-                ->addServer(["REQUEST_METHOD" => "POST"])
-                ->addValues(["action" => "image_upload"]);
+/****************************************** Image uploading routes ****************************************************/
+
+        $router->add('image_form_upload', '/upload/image')
+                ->addValues(['action' => 'image_new']);
+
+        $router->add('image_upload', '/upload/image')
+                ->addServer(['REQUEST_METHOD' => 'POST'])
+                ->addValues(['action' => 'image_upload']);
     }
 
     /**
@@ -156,46 +179,38 @@ class Common extends Config
             $response->content->set('Hello World!');
         });
 
-        $dispatcher->setObject('hello_baby',
-                                $di->lazyNew('Gallery\Actions\HelloBaby')
+        $dispatcher->setObject('root_albums',
+                                $di->lazyNew(GalleryRootAlbumsAction::class)
         );
 
-        $dispatcher->setObject("root_albums",
-                                $di->lazyNew("Gallery\Actions\Gallery\GalleryRootAlbumsAction")
+        $dispatcher->setObject('show_images_albums',
+                                $di->lazyNew(GalleryShowImagesAlbumsAction::class)
         );
 
-        $dispatcher->setObject("show_images_albums",
-                                $di->lazyNew("Gallery\Actions\Gallery\GalleryShowImagesAlbumsAction")
+        $dispatcher->setObject('album_create',
+                                $di->lazyNew(AlbumCreateAction::class)
         );
 
-        $dispatcher->setObject("album_new",
-                                $di->lazyNew("Gallery\Actions\Album\AlbumNewAction")
+        $dispatcher->setObject('gallery_edit',
+                                $di->lazyNew(GalleryEditAction::class)
         );
 
-        $dispatcher->setObject("album_create",
-                                $di->lazyNew("Gallery\Actions\Album\AlbumCreateAction")
+        $dispatcher->setObject('gallery_edit_album_subalbums_image',
+                                $di->lazyNew(GalleryEditAction::class)
         );
 
-        $dispatcher->setObject("gallery_edit",
-                                $di->lazyNew("Gallery\Actions\Gallery\GalleryEditAction")
+        $dispatcher->setObject('albums_edit_album',
+                                $di->lazyNew(AlbumsEditAlbumAction::class)
         );
 
-        $dispatcher->setObject("gallery_edit_album_subalbums_image",
-                                $di->lazyNew("Gallery\Actions\Gallery\GalleryEditAction")
+/*********************************** Image uploading dispatchable actions *********************************************/
+
+        $dispatcher->setObject('image_new',
+                                $di->lazyNew(ImageNewAction::class)
         );
 
-        $dispatcher->setObject("albums_edit_album",
-                                $di->lazyNew("Gallery\Actions\Album\AlbumsEditAlbumAction")
+        $dispatcher->setObject('image_upload',
+                                $di->lazyNew(ImageUploadAction::class)
         );
-
-        $dispatcher->setObject("image_form",
-                                $di->lazyNew("Gallery\Actions\Image\ImageFormCreationAction")
-        );
-
-        $dispatcher->setObject("image_upload",
-                                $di->lazyNew("Gallery\Actions\Image\ImageUploadAction")
-        );
-
-
     }
 }

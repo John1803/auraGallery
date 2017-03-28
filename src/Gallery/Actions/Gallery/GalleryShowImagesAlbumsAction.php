@@ -2,6 +2,10 @@
 
 namespace Gallery\Actions\Gallery;
 
+/**
+ * Class GalleryShowImagesAlbumsAction
+ * @package Gallery\Actions\Gallery
+ */
 class GalleryShowImagesAlbumsAction extends AbstractGalleryAction
 {
     public function __invoke($id)
