@@ -1,0 +1,32 @@
+<?php
+
+echo $this->form([
+        'method' => $method,
+        'action' => $action,
+    ]
+);
+/**
+ * @var \Gallery\Input\ImageForm $imageForm
+ */
+echo $this->input(
+    $imageForm->get('imageOne')
+);
+
+echo $this->input(
+    $imageForm->get('imageTwo')
+);
+
+echo $this->tag('div');
+echo $this->input(
+    $imageForm->get('albums')
+);
+echo $this->tag('/div');
+
+echo $this->input([
+        'type' => 'submit',
+        'name' => 'submit',
+        'value' => $submit,
+    ]
+);
+
+echo $this->tag('/form');

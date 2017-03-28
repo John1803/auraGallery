@@ -1,13 +1,16 @@
 <?php
 use Aura\Html\Escaper;
 
-$this->title()->set("Edit Images and albums"); ?>
+$this->title()->set('Edit Images and albums'); ?>
 <div>
-            <?php echo $this->render('newAlbum'); ?>
+            <?php echo $this->render('albumNew'); ?>
 </div>
-<?php if(count($this->albums) > 0): ?>
+<?php
+if(count($this->albums) > 0): ?>
     <div class="clearfix">
-    <?php foreach($this->albums as $album): ?>
+    <?php
+    /** @var \Gallery\Models\Album\AlbumEntity $album */
+    foreach($this->albums as $album): ?>
         <div class="clearfix">
             <div class="col-xs-2 clearfix">
             <p>
@@ -25,7 +28,9 @@ $this->title()->set("Edit Images and albums"); ?>
 <?php endif; ?>
 <?php if(count($this->images) > 0): ?>
     <div class="clearfix">
-    <?php foreach($this->images as $image): ?>
+    <?php
+    /** @var \Gallery\Models\Image\ImageEntity $image */
+    foreach($this->images as $image): ?>
         <div class="col-xs-2 clearfix">
             <p>
                 <a href="/gallery/albums/images/album/<?php echo Escaper::h($image->getId()); ?>">

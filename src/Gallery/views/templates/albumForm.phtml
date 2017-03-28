@@ -3,19 +3,19 @@
 echo $this->form([
     'method' => $method,
     'action' => $action,
-    'enctype' => "application/x-www-form-urlencoded",
+    'enctype' => 'application/x-www-form-urlencoded',
     ]
 );
     /**
      * @var \Gallery\Input\AlbumForm $albumForm
      */
 echo $this->input(
-    $albumForm->get("album")
+    $albumForm->get('album')
 );
 
 echo $this->input([
-    'type'    => "hidden",
-    'name'    => "album[parent]",
+    'type'    => 'hidden',
+    'name'    => 'album[parent]',
     'value'   => $album->getId(),
 ]);
 
