@@ -12,7 +12,7 @@ abstract class AbstractGalleryResponder extends AbstractResponder
 
         $templates = [
             'rootAlbums',
-            'albumsImages',
+            'imagesAlbums',
             'albumForm',
             'galleryEdit',
             'albumNew',
