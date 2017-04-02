@@ -32,6 +32,8 @@ class AbstractForm extends Form
     }
 
     /**
+     * This method prepare album's data for drop-down list (select-option) to ImageForm
+     *
      * @return array
      */
     public function prepareSelectOptionsData()

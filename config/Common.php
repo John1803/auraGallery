@@ -116,12 +116,6 @@ class Common extends Config
         /** @var \Aura\Router\Router $router */
         $router = $di->get('aura/web-kernel:router');
 
-        $router->add('hello', '/hello')
-               ->setValues(array('action' => 'hello'));
-
-        $router->add('hello_baby', '/baby')
-               ->addValues(array('action' => 'hello_baby'));
-
         $router->add('gallery_root_albums', '/')
                 ->addValues(['action' => 'root_albums']);
 
@@ -148,22 +142,19 @@ class Common extends Config
         $router->add('album_new', '/album/new')
                 ->addServer(['REQUEST_METHOD' => 'POST'])
                 ->addValues(['action' => 'album_create']);
-            
-
 
         $router->add('albums_edit_album', '/edit/album/{id}')
                 ->addTokens(['id' => '\d+'])
                 ->addValues(['action' => 'albums_edit_album']);
 
-
 /****************************************** Image uploading routes ****************************************************/
 
-        $router->add('image_form_upload', '/upload/image')
-                ->addValues(['action' => 'image_new']);
+        $router->add('images_form_upload', '/upload/images-form')
+                ->addValues(['action' => 'images_new']);
 
-        $router->add('image_upload', '/upload/image')
+        $router->add('images_upload', '/upload/images')
                 ->addServer(['REQUEST_METHOD' => 'POST'])
-                ->addValues(['action' => 'image_upload']);
+                ->addValues(['action' => 'images_upload']);
     }
 
     /**
@@ -179,7 +170,8 @@ class Common extends Config
             $response->content->set('Hello World!');
         });
 
-        $dispatcher->setObject('root_albums',
+        $dispatcher->setObject(
+            'root_albums',
                                 $di->lazyNew(GalleryRootAlbumsAction::class)
         );
 
@@ -205,11 +197,11 @@ class Common extends Config
 
 /*********************************** Image uploading dispatchable actions *********************************************/
 
-        $dispatcher->setObject('image_new',
+        $dispatcher->setObject('images_new',
                                 $di->lazyNew(ImageNewAction::class)
         );
 
-        $dispatcher->setObject('image_upload',
+        $dispatcher->setObject('images_upload',
                                 $di->lazyNew(ImageUploadAction::class)
         );
     }

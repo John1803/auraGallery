@@ -2,7 +2,6 @@
 
 namespace Gallery\Models\Album;
 
-use Filesystem\Filesystem;
 use Filesystem\FilesystemInterface;
 use FOA\DomainPayload\PayloadFactory;
 use Gallery\Input\AlbumForm;
@@ -70,6 +69,26 @@ class AlbumService
 
     }
 
+    /**
+     * @param int $id
+     * @return \FOA\DomainPayload\Error|\FOA\DomainPayload\Found|\FOA\DomainPayload\NotFound
+     */
+    public function getAlbumById(int $id)
+    {
+        try {
+            $albumRow = $this->albumModel->fetchAlbumById($id);
+            if($albumRow) {
+                $album = $this->albumMapper->newEntity($albumRow);
+                return $this->payloadFactory->found(['album' => $album, ]);
+            }
+            return $this->payloadFactory->notFound([]);
+        } catch (\Exception $e) {
+            return $this->payloadFactory->error(['exception' => $e, ]);
+        }
+    }
+    /**
+     * @return \FOA\DomainPayload\Error|\FOA\DomainPayload\Found|\FOA\DomainPayload\NotFound
+     */
     public function getRootAlbums()
     {
         try {
@@ -80,7 +99,6 @@ class AlbumService
             }
             $albums = [];
             return $this->payloadFactory->notFound(['albums' => $albums, ]);
-
         } catch (\Exception $e) {
             return $this->payloadFactory->error(["exception" => $e, ]);
         }
@@ -146,14 +164,13 @@ class AlbumService
             if ($albumRow) {
                 $album = $this->albumMapper->newEntity($albumRow);
                 $this->filesystem->mkdir($album->getPath());
-                return $this->payloadFactory->created(['album' => $album,
-                                                        'albumForm' => $this->albumForm, ]
-                );
+                return $this->payloadFactory->created(['album' => $album, ]);
             }
         } catch (\Exception $e) {
-            return $this->payloadFactory->error(['exception' => $e,
-                    'data' => $data, ]
-            );
+            return $this->payloadFactory->error([
+                'exception' => $e,
+                'data' => $data,
+            ]);
         }
     }
 }

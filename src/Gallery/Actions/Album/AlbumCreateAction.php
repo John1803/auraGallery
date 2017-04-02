@@ -6,6 +6,10 @@ use Aura\Web\Request;
 use Gallery\Models\Album\AlbumService;
 use Gallery\Responders\Album\AlbumCreateResponder;
 
+/**
+ * Class AlbumCreateAction
+ * @package Gallery\Actions\Album
+ */
 class AlbumCreateAction
 {
     /**
@@ -33,16 +37,18 @@ class AlbumCreateAction
         Request $request,
         AlbumService $albumService,
         AlbumCreateResponder $albumCreateResponder
-    )
-    {
+    ) {
         $this->request = $request;
         $this->albumService = $albumService;
         $this->albumCreateResponder = $albumCreateResponder;
     }
 
+    /**
+     * @return AlbumCreateResponder
+     */
     public function __invoke()
     {
-        $albumCreationData = $this->request->post->get("album");
+        $albumCreationData = $this->request->post->get('album');
         $albumCreationResult = $this->albumService->createAlbum($albumCreationData);
         $this->albumCreateResponder->setPayload($albumCreationResult);
         return $this->albumCreateResponder;
