@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <?php echo $this->title(); ?>
+
+    <link rel="stylesheet" href="/css/poole.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <link rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/hyde-appendix.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yegor256.github.io/tacit/tacit.min.css">
+</head>
+<body>
+
+    <?php if ($this->hasSection('sidebar')):
+        echo $this->getSection('sidebar');
+    else:
+        echo $this->render('sidebar');
+    endif; ?>
+    <div class="content container">
+        <?php echo $this->getContent(); ?>
+    </div>
+</body>
+</html>

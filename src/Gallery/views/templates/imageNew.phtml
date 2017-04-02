@@ -1,0 +1,13 @@
+<h3>New Image</h3>
+
+<?php
+/** @var \Aura\View\View $this */
+echo $this->render(
+    'imageForm',
+    ['method' => 'POST',
+        'action' => '/upload/images',
+        'submit' => 'Create',
+        'image' => $this->image,
+        'imageForm' => $this->imageForm,
+    ]
+); ?>

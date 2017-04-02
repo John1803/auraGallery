@@ -1,0 +1,47 @@
+<?php
+use Aura\Html\Escaper;
+
+$this->title()->set('Edit Images and albums'); ?>
+<div>
+            <?php echo $this->render('albumNew'); ?>
+</div>
+<?php
+if(count($this->albums) > 0): ?>
+    <div class="clearfix">
+    <?php
+    /** @var \Gallery\Models\Album\AlbumEntity $album */
+    foreach($this->albums as $album): ?>
+        <div class="clearfix">
+            <div class="col-xs-2 clearfix">
+            <p>
+                <a href="/edit/albums/images/<?php echo Escaper::h($album->getId()); ?>">
+                    <?php echo Escaper::h($album->getTitle()); ?>
+                </a>
+            </p>
+             <p><?php echo $this->a("#", "Edit"); ?> |
+                <?php echo $this->a("#", "Delete"); ?></p>
+<!--                <p>--><?php //echo $this->a("/edit/album/{$album->getId()}", "Edit"); ?><!-- |-->
+<!--                --><?php //echo $this->a("/edit/delete/{$album->getId()}", "Delete"); ?><!--</p>-->
+        </div>
+    <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+<?php if(count($this->images) > 0): ?>
+    <div class="clearfix">
+    <?php
+    /** @var \Gallery\Models\Image\ImageEntity $image */
+    foreach($this->images as $image): ?>
+        <div class="col-xs-2 clearfix">
+            <p>
+                <a href="/gallery/albums/images/album/<?php echo Escaper::h($image->getId()); ?>">
+                    <?php echo Escaper::h($image->getTitle()); ?>
+                </a>
+            </p>
+            <p><?php echo $this->a("#", "Edit"); ?> |
+                <?php echo $this->a("#", "Delete"); ?></p>
+<!--            <p>--><?php //echo $this->a("/edit/image/{$image->getId()}", "Edit"); ?><!-- |-->
+<!--                --><?php //echo $this->a("/edit/delete/{$image->getId()}", "Delete"); ?><!--</p>-->
+        </div>
+    <?php endforeach; ?>
+    </div>
+<?php endif; ?>

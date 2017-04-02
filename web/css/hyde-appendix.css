@@ -1,0 +1,18 @@
+@media (min-width: 1200px) {
+    .content.container {
+        margin-left: 9rem;
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media (min-width: 48em) {
+    .sidebar {
+        width: 10rem;
+    }
+
+    .sidebar-sticky {
+         position: relative;
+    }
+}
+

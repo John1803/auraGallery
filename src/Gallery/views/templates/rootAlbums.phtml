@@ -1,0 +1,20 @@
+<?php
+use Aura\Html\Escaper;
+
+$this->title()->set("Edit Gallery");
+
+if(count($this->albums) > 0):
+
+    foreach($this->albums as $album): ?>
+        <div class="col-xs-2 clearfix">
+            <p>
+                <a href="/gallery/albums/images/album/<?php echo Escaper::h($album->getId()); ?>">
+                    <?php echo Escaper::h($album->getTitle()); ?>
+                </a>
+            </p>
+        </div>
+        <?php endforeach; ?>
+<?php else: ?>
+    <p>No current albums. <a href="<?php echo $this->router()->generate("gallery_edit"); ?>">Create</a> first album!</p>
+<?php endif; ?>
+
