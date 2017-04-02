@@ -5,9 +5,9 @@
 echo $this->render(
     'imageForm',
     ['method' => 'POST',
-        'action' => '/image/new',
+        'action' => '/upload/images',
         'submit' => 'Create',
-        'album' => $this->image,
+        'image' => $this->image,
         'imageForm' => $this->imageForm,
     ]
 ); ?>

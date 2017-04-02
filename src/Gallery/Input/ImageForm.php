@@ -11,17 +11,20 @@ class ImageForm extends AbstractForm
         $this->setField('imageOne', 'file')
             ->setAttribs([
                 'id' => 'image-one',
-                'name' => 'image[]',
+                'name' => 'images[]',
             ]);
 
         $this->setField('imageTwo', 'file')
             ->setAttribs([
                 'id' => 'image-two',
-                'name' => 'image[]',
+                'name' => 'images[]',
             ]);
 
-        $this->setField('albums', 'select')
-            ->setAttribs(['id' => 'albums',])
+        $this->setField('imagesAlbum', 'select')
+            ->setAttribs([
+                'id' => 'albums',
+                'name' => 'imagesAlbum'
+            ])
             ->setOptions($albums);
     }
 }
